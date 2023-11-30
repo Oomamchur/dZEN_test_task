@@ -1,10 +1,13 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from comment.models import MainComment, Comment
 from comment.pagination import CommentPagination
+from comment.permissions import (
+    IsAdminOrCreatorOrReadOnly,
+)
 from comment.serializers import (
     MainCommentSerializer,
     MainCommentListSerializer,
@@ -16,8 +19,15 @@ from comment.serializers import (
 class MainCommentViewSet(viewsets.ModelViewSet):
     queryset = MainComment.objects.all()
     serializer_class = MainCommentSerializer
-    permission_classes = (AllowAny,)
     pagination_class = CommentPagination
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [IsAuthenticated()]
+        if self.action in ("update", "partial_update", "destroy"):
+            return [IsAdminOrCreatorOrReadOnly()]
+
+        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.action == "list":
