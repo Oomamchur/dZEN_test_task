@@ -6,7 +6,7 @@ from comment.models import MainComment, Comment
 class MainCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainComment
-        fields = ("id", "text", "home_page")
+        fields = ("id", "text", "image", "home_page")
 
 
 class MainCommentListSerializer(MainCommentSerializer):
@@ -17,6 +17,7 @@ class MainCommentListSerializer(MainCommentSerializer):
             "user",
             "created_at",
             "text",
+            "image",
             "home_page",
             "comments_count",
         )
@@ -28,6 +29,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "text",
+            "image",
         )
 
 
@@ -39,6 +41,7 @@ class CommentListSerializer(CommentSerializer):
             "user",
             "created_at",
             "text",
+            "image",
         )
 
 
@@ -52,6 +55,7 @@ class MainCommentDetailSerializer(MainCommentSerializer):
             "user",
             "created_at",
             "text",
+            "image",
             "home_page",
             "comments",
         )

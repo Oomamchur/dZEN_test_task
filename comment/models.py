@@ -1,6 +1,17 @@
+import os
+import uuid
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.text import slugify
+
+
+def comment_image_file_path(instance, filename) -> str:
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.user.username)}-{uuid.uuid4()}{extension}"
+
+    return os.path.join("media/uploads/comments/", filename)
 
 
 class MainComment(models.Model):
@@ -12,6 +23,7 @@ class MainComment(models.Model):
     )
     home_page = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(null=True, upload_to=comment_image_file_path)
 
     @property
     def comments_count(self):
@@ -35,6 +47,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(null=True, upload_to=comment_image_file_path)
 
     class Meta:
         ordering = ["created_at"]
