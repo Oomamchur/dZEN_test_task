@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from comment.models import MainComment, Comment
+from comment.pagination import CommentPagination
 from comment.serializers import (
     MainCommentSerializer,
     MainCommentListSerializer,
@@ -16,6 +17,7 @@ class MainCommentViewSet(viewsets.ModelViewSet):
     queryset = MainComment.objects.all()
     serializer_class = MainCommentSerializer
     permission_classes = (AllowAny,)
+    pagination_class = CommentPagination
 
     def get_serializer_class(self):
         if self.action == "list":
