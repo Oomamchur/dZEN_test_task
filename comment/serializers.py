@@ -22,7 +22,29 @@ class MainCommentListSerializer(MainCommentSerializer):
         )
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = (
+            "id",
+            "text",
+        )
+
+
+class CommentListSerializer(CommentSerializer):
+    class Meta:
+        model = Comment
+        fields = (
+            "id",
+            "user",
+            "created_at",
+            "text",
+        )
+
+
 class MainCommentDetailSerializer(MainCommentSerializer):
+    comments = CommentListSerializer(many=True, read_only=True)
+
     class Meta:
         model = MainComment
         fields = (
@@ -32,13 +54,4 @@ class MainCommentDetailSerializer(MainCommentSerializer):
             "text",
             "home_page",
             "comments",
-        )
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = (
-            "id",
-            "text",
         )

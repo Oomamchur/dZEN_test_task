@@ -21,6 +21,15 @@ class MainCommentViewSet(viewsets.ModelViewSet):
     serializer_class = MainCommentSerializer
     pagination_class = CommentPagination
 
+    def get_queryset(self):
+        queryset = self.queryset
+
+        username = self.request.query_params.get("username")
+        if username:
+            queryset = queryset.filter(user__username__icontains=username)
+
+        return queryset
+
     def get_permissions(self):
         if self.action == "create":
             return [IsAuthenticated()]
