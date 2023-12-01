@@ -63,6 +63,7 @@ class MainCommentViewSet(viewsets.ModelViewSet):
             main_comment=main_comment,
             user=user,
             text=request.data["text"],
+            image=request.data["image"],
         )
 
         return Response(status=status.HTTP_200_OK)
